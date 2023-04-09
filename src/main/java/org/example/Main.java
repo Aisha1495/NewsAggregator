@@ -3,16 +3,18 @@ package org.example;
 import okhttp3.*;
 
 import java.io.IOException;
+import java.sql.*;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
     private static final String URL = "jdbc:sqlserver://localhost:1433;databaseName=Articles";
     private static final String USERNAME = "root";
     private static final String PASSWORD = "12345";
     private static final String INSERT_SQL = "INSERT INTO Articles (Title, Author, Date, Category, Content) VALUES (?, ?, ?, ?, ?)";
+
+    private static final String SELECT_BY_KEYWORD = "SELECT * FROM Articles WHERE Title LIKE ? OR Content LIKE ?";
 
     public static void main(String[] args) throws IOException {
         OkHttpClient client = new OkHttpClient().newBuilder()
@@ -25,18 +27,31 @@ public class Main {
         System.out.println(response.body().string());
     }
 
-    public static void insertArticle(Article article) {
-//        try (Connection conn = DriverManager.getConnection(URL, root, 12345);
-//             PreparedStatement pstmt = conn.prepareStatement(INSERT_SQL)) {
-//            pstmt.setString(1, article.getTitle());
-//            pstmt.setString(2, article.getAuthor());
-//            pstmt.setDate(3, article.getDate());
-//            pstmt.setString(4, article.getCategory());
-//            pstmt.setString(5, article.getContent());
-//            pstmt.executeUpdate();
-//        } catch (SQLException ex) {
-//            ex.printStackTrace();
-//        }
+
+
+    public static List<Article> searchByKeyword(String keyword) {
+        List<Article> articles = new ArrayList<>();
+        try (Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+             PreparedStatement pstmt = conn.prepareStatement(SELECT_BY_KEYWORD)) {
+            pstmt.setString(1, "%" + keyword + "%");
+            pstmt.setString(2, "%" + keyword + "%");
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Article article = new Article(
+                        rs.getString("Title"),
+                        rs.getString("Author"),
+                        rs.getDate("Date"),
+                        rs.getString("Category"),
+                        rs.getString("Content")
+                );
+                articles.add(article);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return articles;
     }
 
-}
+    }
+
+
