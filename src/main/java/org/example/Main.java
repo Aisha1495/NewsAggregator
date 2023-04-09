@@ -52,6 +52,57 @@ public class Main {
         return articles;
     }
 
+
+    public List<Article> getArticlesByCategory(String category) {
+        List<Article> articles = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            // Establish a database connection
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/Articles", "username", "password");
+
+            // Prepare a SQL statement to retrieve articles by category
+            String query = "SELECT * FROM articles WHERE category = ?";
+            statement = connection.prepareStatement(query);
+            statement.setString(1, category);
+
+            // Execute the SQL statement
+            resultSet = statement.executeQuery();
+
+            // Iterate over the result set and create Article objects for each record
+            while (resultSet.next()) {
+                String title = resultSet.getString("title");
+                String author = resultSet.getString("author");
+                Date date = resultSet.getDate("date");
+                String content = resultSet.getString("content");
+                Article article = new Article(title, author, date, category, content);
+                articles.add(article);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            // Close the database resources
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return articles;
     }
+
+
+}
 
 
