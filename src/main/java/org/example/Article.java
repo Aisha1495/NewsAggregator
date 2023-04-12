@@ -9,6 +9,18 @@ public class Article {
     private String category;
     private String content;
 
+    private String status;
+
+    private String copyright;
+
+    public String getCopyright() {
+        return copyright;
+    }
+
+    public void setCopyright(String copyright) {
+        this.copyright = copyright;
+    }
+
     public Article(String title, String author, Date date, String category, String content) {
         this.title = title;
         this.author = author;
@@ -46,6 +58,14 @@ public class Article {
                 ", category='" + category + '\'' +
                 ", content='" + content + '\'' +
                 '}';
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
 

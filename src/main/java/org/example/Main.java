@@ -8,6 +8,9 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.Gson;
+
+import java.util.Date;
 public class Main {
     private static final String URL = "jdbc:sqlserver://localhost:1433;databaseName=Articles";
     private static final String USERNAME = "root";
@@ -25,8 +28,15 @@ public class Main {
                 .build();
         Response response = client.newCall(request).execute();
         System.out.println(response.body().string());
-    }
 
+///
+        Gson gson = new Gson();
+
+        Article m = gson.fromJson(response.body().toString(), Article.class);
+System.out.print ("This to Try for now: " + m.getCopyright());
+
+
+    }
 
 
     public static List<Article> searchByKeyword(String keyword) {

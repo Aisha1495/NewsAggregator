@@ -21,6 +21,36 @@
             <artifactId>okhttp</artifactId>
             <version>4.10.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.danielgindi</groupId>
+            <artifactId>httprequest</artifactId>
+            <version>1.2.0</version>
+
+
+
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
+            <version>11.2.1.jre17</version>
+        </dependency>
+
+
+
+
+
+
+
+
+
     </dependencies>
+
+
 
 </project>
